@@ -9,7 +9,6 @@ function add_pm_floorplan_shortcode( $atts ) {
 	
 	
 	$settings = get_post_meta( $id, 'pm-floorplan-settings', true );
-	//$panels  = json_decode( get_post_meta( $id, 'pm-panels-data', true ), true );
 	$panels  = get_post_meta( $id, 'pm-panels-data', true );
 	
 	$pm_google_api_key = get_option('pm_google_api_key');
@@ -26,8 +25,6 @@ function add_pm_floorplan_shortcode( $atts ) {
 	
 		
 	$html = '';
-	
-	// 1. img width = 800px / 100 = 8 - 2. 8 x 10 = 80%
 		
 	if($settings['floorplanResponsiveness'] == 1){
 		$html .= '<div id="pm_floorplan_container">';//If responsive mode is true, set percentage width in javascript
@@ -42,8 +39,6 @@ function add_pm_floorplan_shortcode( $atts ) {
 			$html .= '<div class="pm_floorplan"><img src="'.$settings['floorplanImage'].'"></div>';			
 		
 		$html .= '</div>';//close pm_floorplan_container
-		
-		//$html .= '<div style="clear:both;"></div>';
 	
 	$html .= '</div>';//close pm_floorplan_container
 	

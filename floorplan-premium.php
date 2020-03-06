@@ -26,7 +26,7 @@ if ( ! defined( 'PM_DOCS_URL' ) ) {
   define( 'PM_DOCS_URL', PM_URL . 'documentation');
 }
 if ( ! defined( 'PM_DEBUG' ) ) {
-  define( 'PM_DEBUG', true );
+  define( 'PM_DEBUG', false );
 }
 
 // Implicitly prevent the plugin's installation from collision
@@ -198,21 +198,7 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 		public function floorplan_messages( $messages ) {
 			
 		  global $post, $post_ID;
-		  $messages['floorplan'][6] = __( 'Presentation Published', 'premiumPresentations' ) . sprintf( ' <a href="%s">' . __( 'View Presentation', 'premiumPresentations' ) . '</a>', esc_url( get_permalink($post_ID) ) ); 
-		  
-		  /*$messages['floorplan'] = array(
-                0 => '', // Unused. Messages start at index 1.
-                1 => sprintf( __( '%s updated. <a href="%s" target="_blank">View %s</a>' ), esc_attr( $singular ), esc_url( get_permalink( $post_ID ) ), strtolower( $singular ) ),
-                2 => __( 'Custom field updated.', 'maxson' ),
-                3 => __( 'Custom field deleted.', 'maxson' ),
-                4 => sprintf( __( '%s updated.', 'maxson' ), esc_attr( $singular ) ),
-                5 => isset( $_GET['revision']) ? sprintf( __('%2$s restored to revision from %1$s', 'maxson' ), wp_post_revision_title( (int) $_GET['revision'], false ), esc_attr( $singular ) ) : false,
-                6 => sprintf( __( 'Presentation published. <a href="%s">View %s</a>'), $singular, esc_url( get_permalink( $post_ID ) ), strtolower( $singular ) ),
-                7 => sprintf( __( '%s saved.', 'maxson' ), esc_attr( $singular ) ),
-                8 => sprintf( __( '%s submitted. <a href="%s" target="_blank">Preview %s</a>'), $singular, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), strtolower( $singular ) ),
-                9 => sprintf( __( '%s scheduled for: <strong>%s</strong>. <a href="%s" target="_blank">Preview %s</a>' ), $singular, date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_ID ) ), strtolower( $singular ) ),
-                10 => sprintf( __( '%s draft updated. <a href="%s" target="_blank">Preview %s</a>'), $singular, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ), strtolower( $singular ) )
-          );*/
+		  $messages['floorplan'][6] = __( 'Presentation Published', 'premiumPresentations' ) . sprintf( ' <a href="%s">' . __( 'View Presentation', 'premiumPresentations' ) . '</a>', esc_url( get_permalink($post_ID) ) );
 		      
 		  return $messages;
 		  
@@ -553,10 +539,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
                     
                     </div>
                     
-                    
-                    <?php //echo $settings['panelAutoResize']; ?>
-                    <?php //$settings['panelLayout'] == 'pm-lo-3' ? print 'true' : ''; ?>
-                    
                     <div class="submitbox" id="submitpost">
                       <div id="delete-action">
                         <a class="button button-primary button-large delete" href="<?php echo get_delete_post_link( $post->ID ); ?>"><?php _e( 'Move to Trash', 'premiumPresentations' ) ?></a>
@@ -582,10 +564,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 		//SAVE DATA
 		public function save_data( $post_id ) {
 			
-			//$panels = sanitize_text_field( $_POST['pm-panels-data'] );
-			//print_r($panels);
-			//return;
-			
 			//Safety checks first before saving anything
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
         		return $post_id;
@@ -598,11 +576,8 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 			
 			if ( !isset( $_POST['post_type'] ) || 'floorplan' !== $_POST['post_type'] )
         		return;
-				
-			//All good, continue to process data
 			
 			// Saving panels data.
-			//$panels = sanitize_text_field( $_POST['pm-panels-data'] ); //retrieved from floorplan_editor method
 			$panels = $_POST['pm-panels-data'] ; //retrieved from floorplan_editor method
 			update_post_meta( $post_id, 'pm-panels-data', $panels );
 			
@@ -654,13 +629,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 			
 			update_post_meta( $post_id, 'pm-floorplan-settings', $settings );
 			
-			//Check for old data and remove it if neccessary
-			/*if ( isset( $_POST['floorplan-old'] ) ) {
-				
-				//do actions
-				
-			}*/
-			
 		}//end of save_data
 		
 		
@@ -680,23 +648,12 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 				
 			//Grab panel info second
 			$panels = get_post_meta( $post->ID, 'pm-panels-data', true );
-						
-		    /*
-			$panels = json_decode( $panels, true ); //add true for associative array
-      		$panels = ( $panels ) ? $panels : array();
-			foreach($panels as $i => $panel){
-				echo $panel['panelTitle'] .' '. $panel['panelDesc'] .' '. $panel['markerX'];
-			};
-			*/
-			
-			//print_r($panels);
 			
 			?>
             
             <div class="pm-wrap postbox" data-url="<?php echo PM_ADMIN_URL; ?>" >
             	
-                <!-- MARKER editor -->
-                
+                <!-- MARKER editor -->                
                 <div id="floorplan_container" style="background-image:url(<?php echo $settings['floorplanImage'] != 'No Image selected' ? $settings['floorplanImage'] : ''; ?>); width:<?php echo $settings['floorplanWidth'] != '0' ? $settings['floorplanWidth'] : '700'; ?>px; height:<?php echo $settings['floorplanHeight'] != '0' ? $settings['floorplanHeight'] : '200'; ?>px;">
                 <?php 		
 					if($settings['floorplanImage'] == 'No Image selected'){
@@ -705,7 +662,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 				?>
                 
                     <div class="markers_container" style="width:<?php echo $settings['floorplanWidth'] != '0' ? $settings['floorplanWidth'] : '700'; ?>px; height:<?php echo $settings['floorplanHeight'] != '0' ? $settings['floorplanHeight'] : '200'; ?>px;"></div>
-                        <!--<div class="marker circleBase type2" id="panel_marker_1" data-markerPositions='{"xPos":"0px", "yPos":"0px"}' data-markerSize='{"width":"0px", "height":"0px"}' data-markerNumber='{"number":"0"}' ><p>1</p></div>-->
                 </div>
                 
                 <div id="results"></div>
@@ -718,8 +674,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
                     <input type="button" class="button button-primary button-large" value="ADD NEW PANEL" id="add_new_panel_btn" style="margin:0 0 10px 0;" />
                     <input type="button" class="button button-primary button-large delete" value="DELETE ALL PANELS" id="delete_all_btn" style="margin:0 0 10px 0;" />
                     <input type="submit" style="float:right;" name="publish" id="publish" class="button button-primary button-large" value="<?php echo __( 'Update Presentation', 'premiumPresentations' ); ?>" accesskey="p">
-                    <!--DEBUG TESTING-->
-                    <!--<input name="Submit" class="button button-primary button-large" type="submit" id="save_btn" style="margin:0 0 10px 0;" value="TEST DATA" />-->
                     
                     <input type="hidden" id="pm-panels-data" name="pm-panels-data" />
                                     
@@ -748,11 +702,7 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 		
 		
 		public function shortcode_ajax_function(){
-			
-			 //global $wpdb; // this is how you get access to the database
-						
-			 //the first part is a SWTICHBOARD that fires specific functions according to the value of Query Variable 'fn'
-			 		
+						 		
 			 switch($_REQUEST['fn']){
 				case 'run_shortcode_function':
 				   WPBMap::addAllMappedShortcodes();//required for Visual Composer output as of version 4.9
@@ -764,24 +714,11 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 				default:*/
 				  $output = 'No function specified.';
 				break;
-			 }
-		
-		    // at this point, $output contains some sort of data that you want back
-		    // Now, convert $output to JSON and echo it to the browser
-		    // That way, we can recapture it with jQuery and run our success function
-		
-			//$output = json_encode($output);
-						
-			//$output = json_encode($output);
-		    /*if(is_array($output)){
-				print_r($output);
-			} else{
-				echo $output;
-			}*/
-			
+			 }		
+		    
 			echo $output;
 						
-			die();// this is required to return a proper result
+			die();
 		
 	   }//shortcode_ajax_function
 				
@@ -792,31 +729,16 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 			if (! ( isset( $_GET['post']) || isset( $_POST['post'])  || ( isset($_REQUEST['action']) && 'pm_ln_duplicate_post_as_draft' == $_REQUEST['action'] ) ) ) {
 				wp_die('No post to duplicate has been supplied!');
 			}
-		 
-			/*
-			 * get the original post id
-			 */
+
 			$post_id = (isset($_GET['post']) ? $_GET['post'] : $_POST['post']);
-			/*
-			 * and all the original post data then
-			 */
+
 			$post = get_post( $post_id );
-		 
-			/*
-			 * if you don't want current user to be the new post author,
-			 * then change next couple of lines to this: $new_post_author = $post->post_author;
-			 */
+	
 			$current_user = wp_get_current_user();
 			$new_post_author = $current_user->ID;
-		 
-			/*
-			 * if post data exists, create the post duplicate
-			 */
+
 			if (isset( $post ) && $post != null) {
-		 
-				/*
-				 * new post data array
-				 */
+
 				$args = array(
 					'comment_status' => $post->comment_status,
 					'ping_status'    => $post->ping_status,
@@ -832,24 +754,15 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 					'to_ping'        => $post->to_ping,
 					'menu_order'     => $post->menu_order
 				);
-		 
-				/*
-				 * insert the post by wp_insert_post() function
-				 */
-				$new_post_id = wp_insert_post( $args );
-		 
-				/*
-				 * get all current post terms ad set them to the new post draft
-				 */
+		
+				$new_post_id = wp_insert_post( $args );		 
+	
 				$taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
 				foreach ($taxonomies as $taxonomy) {
 					$post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
 					wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
-				}
-		 
-				/*
-				 * duplicate all post meta
-				 */
+				}		 
+
 				$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
 				if (count($post_meta_infos)!=0) {
 					$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
@@ -861,11 +774,7 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 					$sql_query.= implode(" UNION ALL ", $sql_query_sel);
 					$wpdb->query($sql_query);
 				}
-		 
-		 
-				/*
-				 * finally, redirect to the edit post screen for the new draft
-				 */
+
 				wp_redirect( admin_url( 'post.php?action=edit&post=' . $new_post_id ) );
 				exit;
 			} else {
@@ -902,15 +811,10 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 		
 		//Add sub menus
 		public function pm_premium_presentations_settings() {
-	
-			//create custom top-level menu
-			//add_menu_page( 'Framework Documentation', 'Theme Documentation', 'manage_options', __FILE__, 'pm_documentation_main_page',	plugins_url( '/images/wp-icon.png', __FILE__ ) );
 			
 			//create sub-menu items
 			add_submenu_page( 'edit.php?post_type=floorplan', __('Settings'),  __('Settings'), 'manage_options', 'premium_presentations_settings',  array( $this, 'pm_premium_presentations_settings_page' ) );
-			
-			//create an options page under Settings tab
-			//add_options_page('My API Plugin', 'My API Plugin', 'manage_options', 'pm_myplugin', 'pm_myplugin_option_page');	
+
 		}
 		
 		//Paypal Settings page
@@ -966,16 +870,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 	}//end of FloorPlanPremium class
 	
 }//end of class collision if
-
-
-//Add external functions here
-/*if ( ! function_exists( 'floorplan_create_image' ) ) {
-	
-	function floorplan_create_image( $args ) {
-		
-	}
-	
-}*/
 
 // Instantiate the class
 $floorplan = new FloorPlanPremium; 
