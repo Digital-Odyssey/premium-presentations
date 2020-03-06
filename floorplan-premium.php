@@ -66,10 +66,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 			add_action('wp_ajax_nopriv_your_ajax', array( $this, 'shortcode_ajax_function' ) );//_your_ajax is the action required for jQuery Ajax setting
 			add_action('wp_ajax_your_ajax', array( $this, 'shortcode_ajax_function' ));//_your_ajax is the action required for jQuery Ajax setting
 			
-			//add widget text shortcode support
-			//add_filter( 'widget_text', 'do_shortcode' );
-			//add_filter( 'the_content', 'do_shortcode' );
-			
 			//call to shortcode
 			add_filter( 'the_content', array( $this, 'default_floorplan_content' ) );
 			
@@ -185,8 +181,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 			
 			$dot = ( PM_DEBUG ) ? '.' : '.min.';
 			
-			//load styles and scripts
-			//wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery-effects-core' );
 			wp_enqueue_style( 'floorplan-styles', PM_FRONT_URL . '/css/floorplan' . $dot . 'css' );
 			wp_enqueue_script( 'floorplan-app', PM_FRONT_URL . '/js/floorplan' . $dot . 'js', array('jquery'), '1.0.0', true );
@@ -708,10 +702,6 @@ if ( !class_exists( 'FloorPlanPremium' ) ) {
 				   WPBMap::addAllMappedShortcodes();//required for Visual Composer output as of version 4.9
 				   $output = do_shortcode(stripslashes($_REQUEST['required_data'])); //use stripslashes to preseve quotes in shortcode
 				   break;
-				/*case 'some_other_function_you_want_to_perform':   
-				   $output = some_other_function($_REQUEST['first_name'],$_REQUEST['last_name']);
-					break;
-				default:*/
 				  $output = 'No function specified.';
 				break;
 			 }		
