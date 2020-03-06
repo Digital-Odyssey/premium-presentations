@@ -26,7 +26,7 @@ if ( ! defined( 'PM_DOCS_URL' ) ) {
   define( 'PM_DOCS_URL', PM_URL . 'documentation');
 }
 if ( ! defined( 'PM_DEBUG' ) ) {
-  define( 'PM_DEBUG', false );
+  define( 'PM_DEBUG', true );
 }
 
 // Implicitly prevent the plugin's installation from collision
